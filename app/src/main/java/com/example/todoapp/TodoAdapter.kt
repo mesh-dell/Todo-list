@@ -24,6 +24,17 @@ class TodoAdapter(
             )
         )
     }
+    fun addTodo(todo: Todo)
+    {
+        todos.add(todo)
+        notifyItemInserted(todos.size - 1)
+    }
+    fun deleteDoneTodos(){
+        todos.removeAll{ todo ->
+            todo.isChecked
+        }
+        notifyDataSetChanged()
+    }
     private fun toggleStrikeThrough(tvTodoTitle: TextView, isChecked: Boolean)
     {
         if(isChecked){
@@ -38,6 +49,11 @@ class TodoAdapter(
         holder.itemView.apply {
             tvTodoTitle.text = curTodo.title
             cbDone.isChecked = curTodo.isChecked
+            toggleStrikeThrough(tvTodoTitle, curTodo.isChecked)
+            cbDone.setOnCheckedChangeListener { _, isChecked ->
+                toggleStrikeThrough(tvTodoTitle, isChecked)
+                curTodo.isChecked = !curTodo.isChecked
+            }
         }
     }
 
